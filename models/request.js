@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const requestSchema = new Schema({
-  owner: String,
-  host: String,
+  owner: Schema.Types.ObjectId,
+  host: Schema.Types.ObjectId,
   status: {
     type: String,
     enum: ["Accepted", "Rejected", "Pending"],

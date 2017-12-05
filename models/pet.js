@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const petSchema = new Schema({
-  owner: String,
+  owner: Schema.Types.ObjectId,
   name: String,
   type: {
     type: String,
