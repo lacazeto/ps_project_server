@@ -11,10 +11,12 @@ const passport = require("passport");
 const MongoStore = require("connect-mongo")(session);
 const LocalStrategy = require("passport-local").Strategy;
 
+const User = require("../models/user");
+
 // -- REQUIRE ROUTES
-const index = require("./routes/index");
 const auth = require("./routes/auth");
 const users = require("./routes/users");
+const places = require("./routes/places");
 
 // -- CONNECT TO DB
 mongoose.Promise = Promise;
@@ -32,7 +34,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use("/", index);
+app.use("/places", places);
 app.use("/users", users);
 app.use("/auth", auth);
 
