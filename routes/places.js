@@ -9,7 +9,7 @@ router.get("/", function(req, res, next) {
       return next(err); // use return or "else{}", otherwise application will send error and skip to next line.
     }
     res.json({message: "Places found!", data: data});
-  });
+  }).limit(5);
 });
 
 module.exports = router;

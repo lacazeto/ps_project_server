@@ -72,8 +72,9 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   console.error("ERROR", req.method, req.path, err);
   // render the error page
-  if (!res.headersSent) { res.status(500); }
-  res.json({ error: "unexpected", err: err });
+  if (!res.headersSent) {
+    res.status(500).json({ message: "Unexpected error", err: err });
+  }
 });
 
 module.exports = app;

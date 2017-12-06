@@ -14,21 +14,21 @@ const bcryptSalt = 10;
 // -- LOGIN
 router.post("/login", function(req, res, next) {
   if (req.user) {
-    return res.status(403).json({errorMessage: "Forbidden"});
+    return res.status(403).json({ message: "Forbidden" });
   }
   const password = req.body.password;
 
   passport.authenticate("local", (err, theUser, failureDetails) => {
     if (err) {
-      return res.status(500).json({ message: "Unexpected error" });
+      next(err);
     }
     if (!theUser || !password) {
-      return res.status(404).json({errorMessage: "The username or password are invalid!"});
+      return res.status(404).json({ message: "The username or password are invalid!" });
     }
 
     req.login(theUser, (err) => {
       if (err) {
-        return res.status(500).json({ message: "Unexpected error" });
+        next(err);
       }
 
       // We are now logged in (notice req.user)
@@ -51,7 +51,7 @@ router.post("/signup", (req, res, next) => {
 
   User.findOne({ username }, "_id", (err, foundUser) => {
     if (err) {
-      return res.status(500).json({ message: "Unexpected error" });
+      next(err);
     }
     if (foundUser) {
       return res.status(400).json({ message: "This username already exists" });
