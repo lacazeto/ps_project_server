@@ -2,6 +2,7 @@
 
 const express = require("express");
 const path = require("path");
+const cors = require("cors");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -11,7 +12,7 @@ const passport = require("passport");
 const MongoStore = require("connect-mongo")(session);
 const LocalStrategy = require("passport-local").Strategy;
 
-const User = require("../models/user");
+const User = require("./models/user");
 
 // -- REQUIRE ROUTES
 const auth = require("./routes/auth");
@@ -33,6 +34,7 @@ app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cors());
 
 app.use("/places", places);
 app.use("/users", users);
