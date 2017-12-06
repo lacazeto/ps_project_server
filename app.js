@@ -1,7 +1,6 @@
 "use strict";
 
 const express = require("express");
-const path = require("path");
 const cors = require("cors");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
@@ -10,9 +9,8 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
 const MongoStore = require("connect-mongo")(session);
-const LocalStrategy = require("passport-local").Strategy;
 
-const User = require("./models/user");
+const configurePassport = require("./helpers/passport");
 
 // -- REQUIRE ROUTES
 const auth = require("./routes/auth");
@@ -40,16 +38,14 @@ app.use("/places", places);
 app.use("/users", users);
 app.use("/auth", auth);
 
-// -- MIDDLEWARES -- //
-
-// -- SESSION SETUP
+// session setup
 app.use(
   session({
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
       ttl: 24 * 60 * 60 // 1 day
     }),
-    secret: "pets-surfing",
+    secret: "pets",
     resave: true,
     saveUninitialized: true,
     cookie: {
@@ -58,36 +54,8 @@ app.use(
   })
 );
 
-// -- PASSPORT SETUP
-passport.serializeUser((user, cb) => {
-  cb(null, user._id);
-});
-
-passport.deserializeUser((id, cb) => {
-  User.findOne({ "_id": id }, (err, user) => {
-    if (err) { return cb(err); }
-    cb(null, user);
-  });
-});
-
-
-// -- LocalStrategy
-passport.use(new LocalStrategy((username, password, next) => {
-  User.findOne({ username }, (err, user) => {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return next(null, false, { message: "Incorrect username" });
-    }
-    if (!bcrypt.compareSync(password, user.password)) {
-      return next(null, false, { message: "Incorrect password" });
-    }
-    return next(null, user);
-  });
-}));
-
-// configurePassport()
+// passport setup
+configurePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
