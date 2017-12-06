@@ -1,3 +1,6 @@
+"use strict";
+
+const passport = require("passport");
 const express = require("express");
 const router = express.Router();
 
@@ -8,62 +11,80 @@ const User = require("../models/user").User;
 const bcrypt = require("bcrypt");
 const bcryptSalt = 10;
 
-
+// -- LOGIN
 router.post("/login", function(req, res, next) {
-  const username = req.body.username;
+  if (req.user) {
+    return res.status(403).json({errorMessage: "Forbidden"});
+  }
   const password = req.body.password;
 
-  if (username === "" || password === "") {
-    res.status(401);
-    res.json({errorMessage: "Indicate a username and a password to sign up"});
-    return;
-  }
+  passport.authenticate("local", (err, theUser, failureDetails) => {
+    if (err) {
+      return res.status(500).json({ message: "Unexpected error" });
+    }
+    if (!theUser || !password) {
+      return res.status(404).json({errorMessage: "The username or password are invalid!"});
+    }
 
-  User.findOne({ "username": username }, (err, user) => {
-    if (err || !user) {
-      res.status(401);
-      res.json({errorMessage: "The username or password are invalid!"});
-      return;
-    }
-    if (bcrypt.compareSync(password, user.password)) {
-      // Save the login in the session!
-      req.session.currentUser = user;
-      res.status(200);
-      res.json({response: "Logging in"});
-    } else {
-      res.status(401);
-      res.json({errorMessage: "The username or password are invalid!"});
-    }
-  });
+    req.login(theUser, (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Unexpected error" });
+      }
+
+      // We are now logged in (notice req.user)
+      return res.status(200).json(req.user);
+    });
+  })(req, res, next);
 });
 
-router.post("/signup", function(req, res, next) {
+// -- SIGNUP
+router.post("/signup", (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
   const name = req.body.name;
   const salt = bcrypt.genSaltSync(bcryptSalt);
   const hashPass = bcrypt.hashSync(password, salt);
 
-  const newUser = User({
-    username: username,
-    password: hashPass,
-    name: name
-  });
+  if (!username || !password || !name) {
+    return res.status(400).json({ message: "Must fill put all fields" });
+  }
 
-  newUser.save((err) => {
+  User.findOne({ username }, "_id", (err, foundUser) => {
     if (err) {
-      next(err);
+      return res.status(500).json({ message: "Unexpected error" });
     }
-    res.status(200);
-    res.json({response: "User registered!"}); ;
+    if (foundUser) {
+      return res.status(400).json({ message: "This username already exists" });
+    }
+
+    const newUser = User({
+      username: username,
+      password: hashPass,
+      name: name
+    });
+
+    newUser.save((err) => {
+      if (err) {
+        next(err);
+      }
+      res.status(200).res.json({}); ;
+    });
   });
+});
+
+// -- CHECK FOR SESSION
+router.get("/loggedin", (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return res.status(200).json(req.user);
+  }
+
+  return res.status(403).json({ message: "Unauthorized" });
 });
 
 // -- LOGOUT
 router.get("/logout", (req, res) => {
   req.logout();
-  res.status(200);
-  res.json({response: "Logging Out"}); ;
+  res.status(200).res.json({});
 });
 
 module.exports = router;
