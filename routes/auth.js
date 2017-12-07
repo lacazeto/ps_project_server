@@ -23,7 +23,7 @@ router.post("/login", function(req, res, next) {
       next(err);
     }
     if (!theUser || !password) {
-      return res.status(404).json({ message: "The username or password are invalid!" });
+      return res.status(404).json({ message: "The userName or password are invalid!" });
     }
 
     req.login(theUser, (err) => {
@@ -39,18 +39,18 @@ router.post("/login", function(req, res, next) {
 
 // -- SIGNUP
 router.post("/signup", (req, res, next) => {
-  const username = req.body.username;
+  const userName = req.body.userName;
   const password = req.body.password;
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
   const salt = bcrypt.genSaltSync(bcryptSalt);
   const hashPass = bcrypt.hashSync(password, salt);
 
-  if (!username || !password || !firstName || !lastName) {
-    return res.status(400).json({ message: "Must fill put all fields" });
+  if (!userName || !password || !firstName || !lastName) {
+    return res.status(400).json({});
   }
 
-  User.findOne({ username: username }, "_id", (err, foundUser) => {
+  User.findOne({ userName: userName }, "_id", (err, foundUser) => {
     if (err) {
       next(err);
     }
@@ -59,7 +59,7 @@ router.post("/signup", (req, res, next) => {
     }
 
     const newUser = User({
-      username: username,
+      userName: userName,
       password: hashPass,
       firstName: firstName,
       lastName: lastName
