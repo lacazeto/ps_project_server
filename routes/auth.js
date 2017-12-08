@@ -16,14 +16,12 @@ router.post("/login", function(req, res, next) {
   if (req.user) {
     return res.status(403).json({ message: "Forbidden" });
   }
-  const password = req.body.password;
-
   passport.authenticate("local", (err, theUser, failureDetails) => {
     if (err) {
       next(err);
     }
-    if (!theUser || !password) {
-      return res.status(404).json({ message: "The userName or password are invalid!" });
+    if (!theUser) {
+      return res.status(404).json({ message: "The username or password are invalid!" });
     }
 
     req.login(theUser, (err) => {
@@ -39,18 +37,18 @@ router.post("/login", function(req, res, next) {
 
 // -- SIGNUP
 router.post("/signup", (req, res, next) => {
-  const userName = req.body.userName;
+  const username = req.body.username;
   const password = req.body.password;
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
   const salt = bcrypt.genSaltSync(bcryptSalt);
   const hashPass = bcrypt.hashSync(password, salt);
 
-  if (!userName || !password || !firstName || !lastName) {
+  if (!username || !password || !firstName || !lastName) {
     return res.status(400).json({});
   }
 
-  User.findOne({ userName: userName }, "_id", (err, foundUser) => {
+  User.findOne({ username: username }, "_id", (err, foundUser) => {
     if (err) {
       next(err);
     }
@@ -59,7 +57,7 @@ router.post("/signup", (req, res, next) => {
     }
 
     const newUser = User({
-      userName: userName,
+      username: username,
       password: hashPass,
       firstName: firstName,
       lastName: lastName
@@ -80,7 +78,7 @@ router.get("/loggedin", (req, res, next) => {
     return res.status(200).json(req.user);
   }
 
-  return res.status(403).json({ message: "Unauthorized" });
+  return res.status(404).json({ message: "Unauthorized" });
 });
 
 // -- LOGOUT

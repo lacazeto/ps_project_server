@@ -34,10 +34,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 
-app.use("/places", places);
-app.use("/users", users);
-app.use("/auth", auth);
-
 // session setup
 app.use(
   session({
@@ -58,6 +54,11 @@ app.use(
 configurePassport();
 app.use(passport.initialize());
 app.use(passport.session());
+
+// routes
+app.use("/places", places);
+app.use("/users", users);
+app.use("/auth", auth);
 
 // -- ERROR HANDLER AND 404
 
