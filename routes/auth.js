@@ -45,7 +45,7 @@ router.post("/signup", (req, res, next) => {
   const hashPass = bcrypt.hashSync(password, salt);
 
   if (!username || !password || !firstName || !lastName) {
-    return res.status(400).json({});
+    return res.status(401).json({});
   }
 
   User.findOne({ username: username }, "_id", (err, foundUser) => {

@@ -5,7 +5,10 @@ const Schema = mongoose.Schema;
 
 const petSchema = new Schema({
   owner: Schema.Types.ObjectId,
-  name: String,
+  name: {
+    type: String,
+    required: [true, "name is required"]
+  },
   type: {
     type: String,
     enum: ["Dog", "Cat"]
