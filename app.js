@@ -16,6 +16,7 @@ const configurePassport = require("./helpers/passport");
 const auth = require("./routes/auth");
 const users = require("./routes/users");
 const places = require("./routes/places");
+const pet = require("./routes/pet");
 
 // -- CONNECT TO DB
 mongoose.Promise = Promise;
@@ -59,9 +60,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // routes
-app.use("/places", places);
-app.use("/users", users);
+app.use("/place", places);
+app.use("/profile", users);
 app.use("/auth", auth);
+app.use("/pet", pet);
 
 // -- ERROR HANDLER AND 404
 

@@ -12,4 +12,14 @@ router.get("/", function(req, res, next) {
   }).limit(5);
 });
 
+router.get("/:id", function(req, res, next) {
+  const placeId = req.params.id;
+  Place.findById(placeId, (err, place) => {
+    if (err) {
+      return next(err);
+    }
+    return res.json(place);
+  });
+});
+
 module.exports = router;

@@ -21,7 +21,7 @@ router.post("/login", function(req, res, next) {
       next(err);
     }
     if (!theUser) {
-      return res.status(404).json({ message: "The username or password are invalid!" });
+      return res.status(404).json("The username or password are invalid!");
     }
 
     req.login(theUser, (err) => {
@@ -67,7 +67,7 @@ router.post("/signup", (req, res, next) => {
       if (err) {
         next(err);
       }
-      res.status(200).json({}); ;
+      res.status(200).json({});
     });
   });
 });
