@@ -14,7 +14,7 @@ const bcryptSalt = 10;
 // -- LOGIN
 router.post("/login", function(req, res, next) {
   if (req.user) {
-    return res.status(403).json({ message: "Forbidden" });
+    return res.status(403).json("Forbidden");
   }
   passport.authenticate("local", (err, theUser, failureDetails) => {
     if (err) {

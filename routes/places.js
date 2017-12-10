@@ -22,4 +22,9 @@ router.get("/:id", function(req, res, next) {
   });
 });
 
+router.post("/place", function(req, res, next) {
+  const name = req.body.name;
+  // todo
+});
+
 module.exports = router;
