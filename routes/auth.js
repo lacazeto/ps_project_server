@@ -82,9 +82,9 @@ router.get("/loggedin", (req, res, next) => {
 });
 
 // -- LOGOUT
-router.get("/logout", (req, res) => {
+router.post("/logout", (req, res) => {
   req.logout();
-  res.status(200).res.json({});
+  return res.status(200).json({});
 });
 
 module.exports = router;
