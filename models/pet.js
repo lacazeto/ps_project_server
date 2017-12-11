@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const petSchema = new Schema({
-  owner: Schema.Types.ObjectId,
+  owner: String,
   name: {
     type: String,
     required: [true, "name is required"]

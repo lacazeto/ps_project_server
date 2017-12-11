@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const placeSchema = new Schema({
-  owner: Schema.Types.ObjectId,
+  owner: String,
   description: {
     type: String,
     required: [true, "description is required"]

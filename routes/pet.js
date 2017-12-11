@@ -3,7 +3,7 @@ const router = express.Router();
 const Pet = require("../models/pet");
 
 router.post("/", function(req, res, next) {
-  const owner = req.params.id;
+  const owner = req.body.owner;
   const name = req.body.name;
   const type = req.body.type;
   const newPet = Pet({
@@ -26,6 +26,16 @@ router.delete("/", function(req, res, next) {
       return next(err);
     }
     return res.status(200).json({});
+  });
+});
+
+router.get("/:id", function(req, res, next) {
+  const petsOwner = req.params.id;
+  Pet.find({owner: petsOwner}, (err, pets) => {
+    if (err) {
+      return next(err);
+    }
+    return res.json(pets);
   });
 });
 
