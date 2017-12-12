@@ -32,7 +32,7 @@ const placeSchema = new Schema({
     status: {
       type: String,
       enum: ["Accepted", "Rejected", "Pending"],
-      Default: "Pending"
+      default: "Pending"
     }
   }]
 });
