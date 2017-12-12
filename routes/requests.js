@@ -1,26 +1,32 @@
 const express = require("express");
 const router = express.Router();
-const Request = require("../models/request");
+const Place = require("../models/place");
 
-router.post("/", function(req, res, next) {
-  /*  const owner = req.body.owner;
-    const description = req.body.description;
-    const price = req.body.price;
-    const isEnabled = req.body.isEnabled;
-    const typeAccepted = req.body.type;
-    const newPlace = Place({
-      owner: owner,
-      description: description,
-      price: price,
-      isEnabled: isEnabled,
-      type_accepted: typeAccepted
-    });
-    newPlace.save((err) => {
-      if (err) {
-        next(err);
+router.put("/", function(req, res, next) {
+  const owner = req.body.owner;
+  const startDate = req.body.startDate;
+  const endDate = req.body.endDate;
+  const filter = {
+    _id: req.body.placeId
+  };
+  const update = {
+    $push: {
+      requests: {
+        owner: owner,
+        start_Date: startDate,
+        end_Date: endDate
       }
-      res.status(200).json({});
-    }); */
+    }
+  };
+  Place.findOneAndUpdate(filter, update, (err, res) => {
+    if (err) {
+      return next(err);
+    }
+    if (!res) {
+      return res.status(404).json({});
+    }
+  });
+  res.status(200).json({});
 });
 
 module.exports = router;

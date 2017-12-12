@@ -4,13 +4,13 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const placeSchema = new Schema({
-  owner: String,
+  owner: {
+    type: String,
+    required: [true, "owner is required"]
+  },
   city: String,
   address: String,
-  description: {
-    type: String,
-    required: [true, "description is required"]
-  },
+  description: String,
   price: {
     type: String,
     required: [true, "price is required"]
@@ -24,7 +24,17 @@ const placeSchema = new Schema({
   isEnabled: {
     type: Boolean,
     Default: true
-  }
+  },
+  requests: [{
+    owner: String,
+    start_Date: Date,
+    end_Date: Date,
+    status: {
+      type: String,
+      enum: ["Accepted", "Rejected", "Pending"],
+      Default: "Pending"
+    }
+  }]
 });
 
 const Place = mongoose.model("Place", placeSchema);
