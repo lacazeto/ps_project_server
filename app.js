@@ -17,6 +17,7 @@ const auth = require("./routes/auth");
 const users = require("./routes/users");
 const places = require("./routes/places");
 const pet = require("./routes/pet");
+const request = require("./routes/requests");
 
 // -- CONNECT TO DB
 mongoose.Promise = Promise;
@@ -64,6 +65,7 @@ app.use("/place", places);
 app.use("/profile", users);
 app.use("/auth", auth);
 app.use("/pet", pet);
+app.use("/request", request);
 
 // -- ERROR HANDLER AND 404
 

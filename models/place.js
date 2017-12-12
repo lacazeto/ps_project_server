@@ -5,6 +5,8 @@ const Schema = mongoose.Schema;
 
 const placeSchema = new Schema({
   owner: String,
+  city: String,
+  address: String,
   description: {
     type: String,
     required: [true, "description is required"]
