@@ -19,9 +19,9 @@ router.post("/", function(req, res, next) {
   });
 });
 
-router.delete("/", function(req, res, next) {
-  const petId = req.body.id;
-  Pet.deleteOne(petId, (err, profile) => {
+router.delete("/:id", function(req, res, next) {
+  const petId = req.params.id;
+  Pet.deleteOne({_id: petId}, (err, profile) => {
     if (err) {
       return next(err);
     }
