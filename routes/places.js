@@ -21,6 +21,16 @@ router.get("/:id", function(req, res, next) {
   });
 });
 
+router.get("/user/:id", function(req, res, next) {
+  const placeOwner = req.params.id;
+  Place.find({owner: placeOwner}, (err, places) => {
+    if (err) {
+      return next(err);
+    }
+    return res.json(places);
+  });
+});
+
 router.post("/", function(req, res, next) {
   const owner = req.body.owner;
   const description = req.body.description;
@@ -40,6 +50,25 @@ router.post("/", function(req, res, next) {
     }
     res.status(200).json({});
   });
+});
+
+router.put("/", function(req, res, next) {
+  const placeID = req.body._id;
+  const filter = {
+    _id: placeID
+  };
+  const update = {
+    isEnabled: false
+  };
+  Place.findOneAndUpdate(filter, update, (err, res) => {
+    if (err) {
+      return next(err);
+    }
+    if (!res) {
+      return next(err);
+    }
+  });
+  res.status(200).json({});
 });
 
 module.exports = router;

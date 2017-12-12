@@ -23,7 +23,7 @@ router.put("/", function(req, res, next) {
       return next(err);
     }
     if (!res) {
-      return res.status(404).json({});
+      return next(err);
     }
   });
   res.status(200).json({});
