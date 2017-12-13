@@ -14,7 +14,7 @@ router.get("/:id", function(req, res, next) {
   });
 });
 
-router.get("/:id/pet", function(req, res, next) {
+/* router.get("/:id/pet", function(req, res, next) {
   const userId = req.params.id;
   Pet.findById(userId, (err, profile) => {
     if (err) {
@@ -22,6 +22,6 @@ router.get("/:id/pet", function(req, res, next) {
     }
     return res.json(profile);
   });
-});
+}); */
 
 module.exports = router;
