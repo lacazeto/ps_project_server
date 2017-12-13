@@ -35,12 +35,14 @@ router.post("/", function(req, res, next) {
   const owner = req.body.owner;
   const description = req.body.description;
   const price = req.body.price;
+  const city = req.body.city;
   const isEnabled = req.body.isEnabled;
   const typeAccepted = req.body.type;
   const newPlace = Place({
     owner: owner,
     description: description,
     price: price,
+    city: city,
     isEnabled: isEnabled,
     type_accepted: typeAccepted
   });
@@ -49,6 +51,19 @@ router.post("/", function(req, res, next) {
       next(err);
     }
     res.status(200).json({});
+  });
+});
+
+router.post("/search", function(req, res, next) {
+  const price = req.body.price + 1;
+  const city = req.body.city;
+  const isEnabled = true;
+  const typeAccepted = req.body.type_accepted;
+  Place.find({isEnabled: isEnabled, type_accepted: typeAccepted, city: city, price: {$lt: price}}, (err, places) => {
+    if (err) {
+      return next(err);
+    }
+    return res.json(places);
   });
 });
 

@@ -8,11 +8,17 @@ const placeSchema = new Schema({
     type: String,
     required: [true, "owner is required"]
   },
-  city: String,
-  address: String,
-  description: String,
-  price: {
+  city: {
     type: String,
+    required: [true, "city is required"]
+  },
+  address: String,
+  description: {
+    type: String,
+    required: [true, "description is required"]
+  },
+  price: {
+    type: Number,
     required: [true, "price is required"]
   },
   type_accepted: {
