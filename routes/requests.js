@@ -14,7 +14,8 @@ router.put("/", function(req, res, next) {
       requests: {
         owner: owner,
         start_Date: startDate,
-        end_Date: endDate
+        end_Date: endDate,
+        status: "Pending"
       }
     }
   };

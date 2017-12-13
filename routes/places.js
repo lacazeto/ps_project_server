@@ -59,7 +59,7 @@ router.post("/search", function(req, res, next) {
   const city = req.body.city;
   const isEnabled = true;
   const typeAccepted = req.body.type_accepted;
-  Place.find({isEnabled: isEnabled, type_accepted: typeAccepted, city: city, price: {$lt: price}}, (err, places) => {
+  Place.find({$and: [{isEnabled: isEnabled}, {type_accepted: typeAccepted}, {city: city}, {price: {$lt: price}}]}, (err, places) => {
     if (err) {
       return next(err);
     }
