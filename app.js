@@ -83,7 +83,7 @@ app.use(function(err, req, res, next) {
   console.error("ERROR", req.method, req.path, err);
   // render the error page
   if (!res.headersSent) {
-    res.status(500).json({ message: "Unexpected error", err: err });
+    res.status(500).json({ message: "Unexpected error" });
   }
 });
 

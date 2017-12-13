@@ -14,14 +14,14 @@ const bcryptSalt = 10;
 // -- LOGIN
 router.post("/login", function(req, res, next) {
   if (req.user) {
-    return res.status(403).json("Forbidden");
+    return res.status(403).json({ message: "An unexpected error occurred, please try again" });
   }
   passport.authenticate("local", (err, theUser, failureDetails) => {
     if (err) {
       next(err);
     }
     if (!theUser) {
-      return res.status(404).json("The username or password are invalid!");
+      return res.status(404).json({message: "The username or password are invalid!"});
     }
 
     req.login(theUser, (err) => {
@@ -45,7 +45,7 @@ router.post("/signup", (req, res, next) => {
   const hashPass = bcrypt.hashSync(password, salt);
 
   if (!username || !password || !firstName || !lastName) {
-    return res.status(401).json({});
+    return res.status(401).json({ message: "An unexpected error occurred, please try again" });
   }
 
   User.findOne({ username: username }, "_id", (err, foundUser) => {
