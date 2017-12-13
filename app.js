@@ -1,5 +1,7 @@
 "use strict";
 
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const logger = require("morgan");
@@ -21,7 +23,7 @@ const request = require("./routes/requests");
 
 // -- CONNECT TO DB
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/pet-surfing", {
+mongoose.connect(process.env.MONGODB_URI, {
   keepAlive: true,
   reconnectTries: Number.MAX_VALUE,
   useMongoClient: true
@@ -36,7 +38,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors({
   credentials: true,
-  origin: ["http://localhost:4200"]
+  origin: [process.env.CLIENT_URL]
 }));
 
 // session setup
